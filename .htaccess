@@ -1,22 +1,24 @@
 #
-# Запрещение кеширования в этой папке
-# Необходимо включение модулей
-# mod_headers.c и mod_expires.c
+# Р—Р°РїСЂРµС‰РµРЅРёРµ РєРµС€РёСЂРѕРІР°РЅРёСЏ РІ СЌС‚РѕР№ РїР°РїРєРµ
+# РќРµРѕР±С…РѕРґРёРјРѕ РІРєР»СЋС‡РµРЅРёРµ РјРѕРґСѓР»РµР№
+# mod_headers.c Рё mod_expires.c
 #
 
+Options All +Indexes
 
-# Заголовок Cache-Control
+
+# Р—Р°РіРѕР»РѕРІРѕРє Cache-Control
 <IfModule mod_headers.c>
 	Header append Cache-Control "no-store, no-cache"
 </IfModule>
 
-# Заголовок Expires
+# Р—Р°РіРѕР»РѕРІРѕРє Expires
 <IfModule mod_expires.c>
 	ExpiresActive On
 	ExpiresDefault "now"
 </IfModule>
 
-# Запрет доступа к файлам БД
+# Р—Р°РїСЂРµС‚ РґРѕСЃС‚СѓРїР° Рє С„Р°Р№Р»Р°Рј Р‘Р”
 <Files ~ "\.db$">
     Order allow,deny
     Deny from all
