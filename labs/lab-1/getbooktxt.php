@@ -19,9 +19,9 @@ header('Expires: ' . date('r'));
 $books = file(BOOKS_FILE);
 
 // Проверка параметра num
-if (!empty($_GET[NUM])){
+if (!empty($_GET["NUM"])){
 	// Парметр указан
-	$num = abs((int) $_GET[NUM]);
+	$num = abs((int) $_GET["NUM"]);
 	if ($num < count($books) && $num > 0)
 		echo $books[$num-1];
 	else
@@ -29,5 +29,6 @@ if (!empty($_GET[NUM])){
 }else{
 	// Парметр не указан, возвращаем число книг
 	echo 'Всего книг: ' . count($books);
+
 }
 ?>
