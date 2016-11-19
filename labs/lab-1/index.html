@@ -32,9 +32,8 @@
 					alert(request.status + ": " + request.statusText);
 					return;
 				}
-				text = request.responseText;
 				var result = document.getElementById('divResult');
-				result.firstChild.nodeValue = text;
+				result.firstChild.nodeValue = request.responseText;;
 			}
 		}
 		/*
