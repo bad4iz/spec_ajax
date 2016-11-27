@@ -12,11 +12,47 @@
 		**	Задание 1. Список категорий
 		**
 		*/
-	
+		// Очистка списка
+		function clearList(){
+//			var ulResult = document.getElementById("ulResult");
+//			while (ulResult.hasChildNodes())
+//				ulResult.removeChild(ulResult.lastChild);
+		}
+		// Добавление нового элемента списка
+		function addListItem(text){
+			// получим элемент селектора
+			var selectResult = document.getElementById("selCategory");
+			// получаем строку
+			var Text = String(text);
+			// разделим строку на масив
+			var books = Text.split('\n');
+			// cоздадим необходимое количество элементов option с кодами категорий
+			for (var i = 0; i < books.length; i++){
+				if (books[i] == '') continue;
+				// разделим строку по символу ":"
+				var parts = books[i].split(":");
+				// создадис новый элемент option
+				selectResult.options[selectResult.options.length] = new Option(parts[1], parts[0]);
+
+			}
+//				clearList();
+			console.log("вызов");
+		}
 		
 		// При завершении загрузки страницы
 		window.onload = function(){
-		
+			var fileName = "getcategories.php";
+			request = getXmlHttpRequest();
+			request.open("GET", fileName, true);
+			request.send(null);
+			request.onreadystatechange = function(){
+				if (request.readyState !== 4 ) return;
+				if (request.status != 200) {
+					alert(request.status + ": " + request.statusText);
+					return;
+				}
+				addListItem(request.responseText);
+			}
 		}
 		
 	</script>
@@ -26,7 +62,8 @@
 	<form action="#" onsubmit="return false">
 		<div>
 			<label for="selCategory">Категория</label>
-			<select id="selCategory"></select>
+			<select id="selCategory">
+			</select>
 			<button onclick="alert('А это следующая лабораторная работа')">Показать</button>
 		</div>
 	</form>
