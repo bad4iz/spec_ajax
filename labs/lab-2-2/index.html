@@ -12,23 +12,115 @@
 		** Задание 1. Код вставлять сюда
 		**
 		*/
-		
+		// Добавление нового элемента списка
+		function addListItem(text){
+			// получим элемент селектора
+			var selectResult = document.getElementById("selCategory");
+			// получаем строку
+			var Text = String(text);
+			// разделим строку на масив
+			var books = Text.split('\n');
+			// cоздадим необходимое количество элементов option с кодами категорий
+			for (var i = 0; i < books.length; i++){
+				if (books[i] == '') continue;
+				// разделим строку по символу ":"
+				var parts = books[i].split(":");
+				// создадис новый элемент option
+				selectResult.options[selectResult.options.length] = new Option(parts[1], parts[0]);
+
+			}
+		}
+
+		// При завершении загрузки страницы
+		window.onload = function(){
+			var fileName = "getcategories.php";
+			request = getXmlHttpRequest();
+			request.open("GET", fileName, true);
+			request.send(null);
+			request.onreadystatechange = function(){
+				if (request.readyState !== 4 ) return;
+				if (request.status != 200) {
+					alert(request.status + ": " + request.statusText);
+					return;
+				}
+				addListItem(request.responseText);
+			}
+		};
 		/*
 		**
 		**	Задание 2. Выборка книг 
 		**
 		*/
-		function showBooks(){
-			alert("Покажем книгу...");  // Удалите эту строчку! 
+
+		// отрисовка таблицы
+		function writeBookList(autor, title, img){
+			var tableBook = document.getElementById("tableBooks");
+			var row = tableBook.insertRow(-1); // вставка строки в таблицу -1 в конец таблицы  0 в начало
+			row.classList.add(img);
+			var cellAutor = row.insertCell(-1);// вставка ячейки в таблицу -1 в конец таблицы  0 в начало таблицы
+			var cellTitle = row.insertCell(-1);// вставка ячейки в таблицу -1 в конец таблицы  0 в начало таблицы
+			cellAutor.innerHTML = autor;
+			cellTitle.innerHTML = title;
+
 		}
-		
+
+		function getBook(idBook){
+			// Формирование строки поиска
+			var searchString = "cat=" + idBook;
+			//alert("searchString: " + searchString);
+
+			// Запрос к серверу
+			var req = getXmlHttpRequest();
+			req.onreadystatechange = function(){
+				if (req.readyState != 4) return;
+				var responseText = String(req.responseText);
+				var books = responseText.split('\n');
+				clearList();
+
+				for (var i = 0; i < books.length; i++) {
+					// разделим строку по символу ":"
+					var parts = books[i].split("|");
+					writeBookList(parts[0], parts[1], parts[2]);
+				}
+			};
+
+			// Метод POST
+			req.open("POST", "postbooksbycat.php", true);
+
+			// Установка заголовков
+			req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			//req.setRequestHeader("Content-Length", searchString.length);
+
+			// Отправка данных
+			req.send(searchString);
+		}
+
+
+//		// Очистка списка
+		function clearList(){
+			var ulResult = document.getElementById("tableBooks");
+			while (ulResult.hasChildNodes())
+				ulResult.removeChild(ulResult.lastChild);
+		}
+
+
+
+		function showBooks(){
+			var objSel = document.getElementById("selCategory");
+			if ( objSel.selectedIndex != -1)
+			{
+				//Если есть выбранный элемент, отобразить его значение (свойство value)
+				var idBook = objSel.options[objSel.selectedIndex].value;
+				getBook(idBook);
+			}
+		}
+
 		
 		/*
 		**
 		**	Задание 3. Показ изображений
 		**
 		*/
-		
 
 	</script>
 </head>
@@ -38,7 +130,7 @@
 		<div>
 			<label for="selCategory">Категория</label>
 			<select id="selCategory"></select>
-			<button onclick="">Показать</button>
+			<button onclick="showBooks()">Показать</button>
 		</div>
 		
 		<div id="divBookInfo">
