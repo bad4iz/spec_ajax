@@ -1,98 +1,188 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-	<title>Пользователи на сайте</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta http-equiv="Content-Language" content="ru" />
-	<link rel="stylesheet" type="text/css" href="lab-3.css" />
-	<script type="text/javascript" src="../xmlhttprequest.js"></script>
-	<script type="text/javascript" src="json2.js"></script>
-	<script type="text/javascript">
-		// Класс UserInfo
-		function UserInfo() {
-			this.name = "";
-			this.login = "";
-			this.password = "";
-		}
-		
-		// Класс Билет сессии
-		/*
-			function Ticket() {
-				this.id = "";
-				this.valid = false;
-			}
-		*/
-	
-		/*
-		**
-		**	Задание 1. Отображение формы
-		**
-		*/
-		function showLoginForm(){}
-		
-		/*
-		**
-		**	Задание 2. Проверка пользователя 
-		**
-		*/
+    <title>Пользователи на сайте</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Language" content="ru"/>
+    <link rel="stylesheet" type="text/css" href="lab-3.css"/>
+    <script type="text/javascript" src="../xmlhttprequest.js"></script>
+    <script type="text/javascript" src="json2.js"></script>
+    <script type="text/javascript">
 
-		// Билет пользователя
-		var ticket;
-		
-		// Функция проверки пользователя
-		function validateUser(){}
+        var vhod = document.getElementById("divUsers");
+        var login = document.getElementById("frmLogin");
+        var _body = document.getElementsByTagName('body')[0];
 
-		// Функция гашения сообщения об ошибке
-		function hideErrorMessage() {}
 
-		
-		/*
-		**
-		**	Задание 3. Список пользователей
-		**
-		*/
-		
-		function showOnLineUsers() {}
+        var req = getXmlHttpRequest();
 
-		
-	</script>
+        // Класс UserInfo
+        function UserInfo() {
+            this.name = "";
+            this.login = "";
+            this.password = "";
+        }
+
+        // Класс Билет сессии
+        /*
+         function Ticket() {
+         this.id = "";
+         this.valid = false;
+         }
+         */
+
+        /*
+         **
+         **	Задание 1. Отображение формы
+         **
+         */
+        function showLoginForm() {
+            var login = document.getElementById("frmLogin");
+            login.style.display = "block";
+            document.body.style.backgroundColor = "grey";
+        }
+
+        /*
+         **
+         **	Задание 2. Проверка пользователя
+         **
+         */
+
+        // Билет пользователя
+        var ticket;
+
+
+        // Функция проверки пользователя
+        function validateUser() {
+            var error = document.getElementById("divMessage");
+            var login = document.getElementById("frmLogin");
+            user = new UserInfo;
+            user.login = document.getElementById("txtLogin").value;
+            user.password = document.getElementById("txtPassword").value;
+            var jsonData = JSON.stringify(user);
+
+            req.onreadystatechange = function () {
+                if (req.readyState != 4) return;
+
+                // Очистка предыдущих результатов
+
+                // Обработка JSON пакета
+                ticket = JSON.parse(req.responseText);
+
+                // проверка валидности пароля и пользователя
+                if (ticket.valid) {
+                    login.style.display = "";
+                    document.body.style.backgroundColor = "";
+                    // гашение кнопки вход
+                    var btnEnter = document.getElementById("divUsers").getElementsByTagName("button")[0];
+                    btnEnter.style.display = "none";
+
+                    // отображение списка пользователей online
+                    showOnLineUsers();
+                } else {
+                    error.style.display = "";
+                }
+
+            };
+            req.open("POST", "user_auth.php", true);
+            req.setRequestHeader("Content-Type", "text/plain");
+            //req.setRequestHeader("Content-Length", jsonData.length);
+            req.send(jsonData);
+        }
+
+
+        // Функция гашения сообщения об ошибке
+        function hideErrorMessage() {
+            var hide = document.getElementById("divMessage");
+            hide.style.display = "none";
+        }
+
+
+        /*
+         **
+         **	Задание 3. Список пользователей
+         **
+         */
+
+
+        function showOnLineUsers() {
+            var jData = JSON.stringify(ticket);
+            var dUsers = document.getElementById("divUsers");
+            var users = dUsers.getElementsByTagName("ul")[0];
+            req.onreadystatechange = function () {
+                if (req.readyState != 4) return;
+                // Очистка предыдущих результатов
+                clearList(users);
+                // Обработка JSON пакета
+                var tket = JSON.parse(req.responseText);
+                for (var i = 0; i < tket.length; i++) {
+                    addListItem(tket[i].name, users)
+                }
+
+            };
+            setTimeout(showOnLineUsers, 10000);
+            req.open("POST", " get_online_users.php", true);
+            req.setRequestHeader("Content-Type", "text/plain");
+            req.send(jData);
+        }
+
+
+        // Очистка списка
+        function clearList(elem) {
+            var ulResult = elem;
+            while (ulResult.hasChildNodes())
+                ulResult.removeChild(ulResult.lastChild);
+        }
+
+        // Добавление нового элемента списка
+        function addListItem(text, elemUl) {
+            if (text.length == 0) return;
+            var ulResult = elemUl;
+            var li = document.createElement("li");
+            ulResult.appendChild(li);
+            var liText = document.createTextNode(text);
+            li.appendChild(liText);
+        }
+
+
+    </script>
 </head>
 <body>
-	<h1>Пользователи на сайте</h1>
-	
-	<!-- Форма входа -->
-	<form action="#" id="frmLogin" onsubmit="return false" class="block">
-		<h2>Авторизация пользователя</h2>
-		<div>
-			<label for="txtLogin">Логин</label>
-			<input id="txtLogin" type="text" />
-		</div>
-		<div>
-			<label for="txtPassword">Пароль</label>
-			<input id="txtPassword" type="password" />
-		</div>
-		<button onclick="validateUser()">Вход</button>
-		<div id="divMessage" class="block">
-			<h2>Ошибка</h2>
-			<div>Неправильный логин или пароль!</div>
-			<button onclick="hideErrorMessage()">Закрыть</button>
-		</div>
-	</form>
-	
-	<!-- Панель списка пользователей -->
-	<div id="divUsers" class="block">
-		<h2>Пользователи на сайте</h2>
-		<button onclick="showLoginForm()">Вход</button>
-		<ul></ul>
-	</div>
-	
-	<!-- Просто красивые картинки -->
-	<ul style='list-style:none'>
-		<li><img src='../../images/1000478162.jpg'>
-				<img src='../../images/1000569827.jpg'></li>
-		<li><img src='../../images/1000653244.jpg'>
-				<img src='../../images/1000372094.jpg'></li>
-	</ul>
+<h1>Пользователи на сайте</h1>
+
+<!-- Форма входа -->
+<form action="#" id="frmLogin" onsubmit="return false" class="block">
+    <h2>Авторизация пользователя</h2>
+    <div>
+        <label for="txtLogin">Логин</label>
+        <input id="txtLogin" type="text"/>
+    </div>
+    <div>
+        <label for="txtPassword">Пароль</label>
+        <input id="txtPassword" type="password"/>
+    </div>
+    <button onclick="validateUser()">Вход</button>
+    <div id="divMessage" class="block">
+        <h2>Ошибка</h2>
+        <div>Неправильный логин или пароль!</div>
+        <button onclick="hideErrorMessage()">Закрыть</button>
+    </div>
+</form>
+
+<!-- Панель списка пользователей -->
+<div id="divUsers" class="block">
+    <h2>Пользователи на сайте</h2>
+    <button onclick="showLoginForm()">Вход</button>
+    <ul></ul>
+</div>
+
+<!-- Просто красивые картинки -->
+<ul style='list-style:none'>
+    <li><img src='../../images/1000478162.jpg'>
+        <img src='../../images/1000569827.jpg'></li>
+    <li><img src='../../images/1000653244.jpg'>
+        <img src='../../images/1000372094.jpg'></li>
+</ul>
 </body>
 </html>
 

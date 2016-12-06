@@ -7,5 +7,11 @@
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/labs/lab-2-1/books.db</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="users.db" uuid="7912ebdc-7859-4783-a2cd-df0490bc11af">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/labs/lab-3/users.db</jdbc-url>
+    </data-source>
   </component>
 </project>
