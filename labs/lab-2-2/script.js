@@ -32,10 +32,13 @@ function getData(idBook) {
 
 let timer = function() {
    return new Promise(function (resolve, reject) {
-        setTimeout(() => resolve("dfdf"), 3000);
+        setTimeout(() => {
+            Math.random() > .5 ? resolve("Все окей") : reject("не окей")
+        }, 3000
+        );
     });
 };
 
 timer()
-    .then(function(value){console.log(value)})
-    .catch(console.log("sdfsadfsaasdfafd"));
+    .then(function(value){console.info(value)})
+    .catch(error => console.error(error));
