@@ -34,4 +34,4 @@ let timer = new Promise(function(resolve, reject){
     setTimeout(resolve("vddd"), 3000);
 });
 
-timer().then(value=>console.info(value));
+timer().then(value=>console.log(value));
