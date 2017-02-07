@@ -31,7 +31,6 @@ function getData(idBook) {
 //     .then(value=>console.log(value));
 
 let timer = new Promise(resolve, reject){
-    setTimeout(resolve("vddd"), 3000);
+
 }
 
-timer().then(value=>console.info(value));
