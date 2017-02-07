@@ -33,7 +33,7 @@ function getData(idBook) {
 let timer = function() {
    return new Promise(function (resolve, reject) {
         setTimeout(() => {
-            Math.random() > .5 ? resolve("Все окей") : reject("не окей")
+            Math.random() > .2 ? resolve("Все окей") : reject("не окей")
         }, 3000
         );
     });
