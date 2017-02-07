@@ -3,7 +3,11 @@
  */
 
 
-function getData() {
+function getData(url) {
+    return new Promise(function(resolve, reject){
+        let xhr = new XMLHttpRequest();
+        xhr.open(("POST", 'postbooksbycat.php', true);
+        });
     
 }
 var xhr = new XMLHttpRequest();
