@@ -30,9 +30,8 @@ function getData(idBook) {
 // getData(0)
 //     .then(value=>console.log(value));
 
-let timer = function () {
-    return new Promise(resolve, reject){
-        setTimeout(resolve("vddd"), 3000);
-    }
-};
+let timer = new Promise(resolve, reject){
+    setTimeout(resolve("vddd"), 3000);
+}
 
+timer().then(value=>console.info(value));
