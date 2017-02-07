@@ -28,7 +28,7 @@ function getData(idBook) {
 
 
 getData(1)
-    .then(function(value){console.log(value)});
+    .then(value=>console.log(value));
 
 
 
