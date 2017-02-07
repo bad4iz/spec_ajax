@@ -37,4 +37,5 @@ let timer = function() {
 };
 
 timer()
-    .then(function(value){console.log(value)});
+    .then(function(value){console.log(value)})
+    .catch(console.log("sdfsadfsaasdfafd"));
