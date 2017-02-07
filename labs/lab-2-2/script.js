@@ -3,26 +3,29 @@
  */
 
 
-function getData(url) {
+function getData(idBook) {
+    let searchString = "cat=" + idBook;
     return new Promise(function(resolve, reject){
         let xhr = new XMLHttpRequest();
-        xhr.open(("POST", 'postbooksbycat.php', true);
+        xhr.open("POST", 'postbooksbycat.php', true);
+        xhr.onload = function () {
+            if (xhr.status === 200){
+                let json = JSON.parse(xhr.response);
+                resolve(json);
+            }else {
+                reject(xhr.status);
+            }
+        };
+        xhr.onerror = function (error) {
+            reject(error);
+        };
+        xhr.send(searchString);
         });
     
 }
-var xhr = new XMLHttpRequest();
-
-var body = 'name=' + encodeURIComponent(name) +
-    '&surname=' + encodeURIComponent(surname);
-
-xhr.open("POST", 'postbooksbycat.php', true);
-xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-xhr.onreadystatechange = ...;
-
-xhr.send(body);
 
 
-
+getData(2)
+    .then(function(value){console.log(value)});
 
 
